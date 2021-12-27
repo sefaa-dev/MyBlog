@@ -9,7 +9,7 @@ namespace Blog.Data.Repository
 {
     public interface IRepository
     {
-        Post GetPost(int id);
+        Post GetPost(int id); 
         List<Post> GetAllPosts(int id);
         void AddPost(Post post);
         void UpdatePost(Post post);
