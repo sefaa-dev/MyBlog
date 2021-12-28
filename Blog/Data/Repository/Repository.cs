@@ -20,10 +20,12 @@ namespace Blog.Data.Repository
             _ctx.Posts.Add(post);
         }
 
-        public List<Post> GetAllPosts(int id)
+
+        public List<Post> GetAllPosts()
         {
             return _ctx.Posts.ToList();
         }
+
 
         public Post GetPost(int id)
         {
@@ -45,12 +47,14 @@ namespace Blog.Data.Repository
 
         public async Task<bool> SaveChangesAsync()
         {
-            
-            if(await _ctx.SaveChangesAsync() > 0)
+
+            if (await _ctx.SaveChangesAsync() > 0)
             {
                 return true;
             }
             return false;
         }
+
+
     }
 }
