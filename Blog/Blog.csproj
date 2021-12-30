@@ -16,4 +16,15 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="5.0.13" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Panel\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\content\blog\" />
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,5 @@
 using Blog.Data;
+using Blog.Data.FileManager;
 using Blog.Data.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,49 +30,50 @@ namespace Blog
         {
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(_config["DefaultConnection"]));
 
-            services.AddIdentityCore<IdentityUser>(options =>
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 6;
-
-
-
             })
-                .AddRoles<IdentityRole>()
+
+                //.AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
-            //services.AddIdentity<IdentityUser, IdentityRole>(options =>
-            //{
-
-            //}).AddEntityFrameworkStores<AppDbContext>();
-
-
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Auth/Login";
+            });
 
             services.AddTransient<IRepository, Repository>();
-            //services.AddMvc();
-            services.AddControllersWithViews();
+            services.AddTransient<IFileManager, FileManager>();
+            services.AddMvc();
+            //services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseMvcWithDefaultRoute();
+
+           //app.UseMvcWithDefaultRoute();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("default","{controller=Home}/{action=Index}");
             });
         }
     }
